@@ -6,16 +6,31 @@
 //
 
 import SwiftUI
+import Observation
 
 struct ContentView: View {
+    @State private var expenses = Expenses()
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                ForEach(expenses.items, id: \.id) { expense in
+                    Text(expense.name)
+                }
+                .onDelete(perform: removeItems)
+            }
+            .toolbar {
+                Button("Add Expense", systemImage: "plus") {
+                    let expense = ExpenseItem(name: "Test", type: "Personal", amount: 5)
+                    expenses.items.append(expense)
+                }
+            }
+            .navigationTitle("iExpense")
+            
         }
-        .padding()
+    }
+    
+    func removeItems(at offsets: IndexSet) {
+        expenses.items.remove(atOffsets: offsets)
     }
 }
 
