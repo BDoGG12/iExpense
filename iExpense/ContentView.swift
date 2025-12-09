@@ -15,20 +15,44 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(expenses.items) { expense in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(expense.name)
-                                .font(.headline)
-                            Text(expense.type)
+                Section("Business") {
+                    ForEach(expenses.items) { expense in
+                        if expense.type == "Business" {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(expense.name)
+                                        .font(.headline)
+                                    Text(expense.type)
+                                }
+                                
+                                Spacer()
+                                Text(expense.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                
+                            }
                         }
-                        
-                        Spacer()
-                        Text(expense.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                        
                     }
+                    .onDelete(perform: removeItems)
                 }
-                .onDelete(perform: removeItems)
+                
+                Section("Personal") {
+                    ForEach(expenses.items) { expense in
+                        if expense.type == "Personal" {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(expense.name)
+                                        .font(.headline)
+                                    Text(expense.type)
+                                }
+                                
+                                Spacer()
+                                Text(expense.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                
+                            }
+                        }
+                    }
+                    .onDelete(perform: removeItems)
+                }
+                
             }
             .toolbar {
                 Button("Add Expense", systemImage: "plus") {
